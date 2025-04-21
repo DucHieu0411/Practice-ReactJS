@@ -6,8 +6,8 @@ const TableUsers = () => {
   const [listUsers, setListUsers] = useState([]);
   const getUsers = async () => {
     const res = await fetchAllUsers();
-    if (res && res.data && res.data.data) {
-      setListUsers(res.data.data);
+    if (res && res.data) {
+      setListUsers(res.data);
     }
   };
   useEffect(() => {
