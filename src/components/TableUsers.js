@@ -4,7 +4,7 @@ import { fetchAllUsers } from "../services/UserService";
 import ReactPaginate from "react-paginate";
 import ModalAddNew from "./ModalAddNew";
 import ModalEditUser from "./ModalEditUser";
-import _ from "lodash";
+import _, { debounce } from "lodash";
 import ModalConfirm from "./ModalConfirm";
 
 const TableUsers = () => {
@@ -21,6 +21,8 @@ const TableUsers = () => {
 
   const [sortBy, setSortBy] = useState("asc");
   const [sortField, setSortField] = useState("id");
+
+  const [keyword, setKeyword] = useState("");
 
   const getUsers = async (page) => {
     const res = await fetchAllUsers(page);
@@ -78,6 +80,19 @@ const TableUsers = () => {
     setListUsers(cloneListUsers);
   };
 
+  const handleSearch = debounce((e) => {
+    let term = e.target.value;
+    if (term) {
+      let cloneListUsers = _.cloneDeep(listUsers);
+      cloneListUsers = cloneListUsers.filter((item) =>
+        item.email.includes(term)
+      );
+      setListUsers(cloneListUsers);
+    } else {
+      getUsers();
+    }
+  }, 500);
+
   // Hook useEffect
   useEffect(() => {
     // CALL APIS
@@ -101,6 +116,14 @@ const TableUsers = () => {
         >
           Add new user
         </button>
+      </div>
+
+      <div className="col-4 my-3">
+        <input
+          className="form-control"
+          placeholder="Search user by email..."
+          onChange={(e) => handleSearch(e)}
+        />
       </div>
 
       <Table striped bordered hover>
