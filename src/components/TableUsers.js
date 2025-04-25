@@ -60,6 +60,12 @@ const TableUsers = () => {
     setDataUserDelete(user);
   };
 
+  const handleDeleteUserFromModal = (user) => {
+    let cloneListUsers = _.cloneDeep(listUsers);
+    cloneListUsers = cloneListUsers.filter((item) => item.id !== user.id);
+    setListUsers(cloneListUsers);
+  };
+
   // Hook useEffect
   useEffect(() => {
     // CALL APIS
@@ -140,6 +146,7 @@ const TableUsers = () => {
         show={isShowModalDelete}
         handleClose={handleClose}
         dataUserDelete={dataUserDelete}
+        handleDeleteUserFromModal={handleDeleteUserFromModal}
       />
       <ReactPaginate
         breakLabel="..."
