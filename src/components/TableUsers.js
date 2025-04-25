@@ -19,6 +19,9 @@ const TableUsers = () => {
   const [isShowModalDelete, setIsShowModalDelete] = useState(false);
   const [dataUserDelete, setDataUserDelete] = useState({});
 
+  const [sortBy, setSortBy] = useState("asc");
+  const [sortField, setSortField] = useState("id");
+
   const getUsers = async (page) => {
     const res = await fetchAllUsers(page);
     if (res && res.data) {
@@ -66,6 +69,15 @@ const TableUsers = () => {
     setListUsers(cloneListUsers);
   };
 
+  const handleSort = (sortBy, sortField) => {
+    setSortBy(sortBy);
+    setSortField(sortField);
+
+    let cloneListUsers = _.cloneDeep(listUsers);
+    cloneListUsers = _.orderBy(cloneListUsers, [sortField], [sortBy]);
+    setListUsers(cloneListUsers);
+  };
+
   // Hook useEffect
   useEffect(() => {
     // CALL APIS
@@ -94,10 +106,46 @@ const TableUsers = () => {
       <Table striped bordered hover>
         <thead>
           <tr>
-            <th>ID</th>
-            <th>Email</th>
-            <th>First Name</th>
-            <th>Last Name</th>
+            <th>
+              <div style={{ display: "flex", justifyContent: "space-between" }}>
+                <span>ID</span>
+                <span>
+                  <i
+                    className="fa-solid fa-arrow-down-long"
+                    style={{ cursor: "pointer" }}
+                    onClick={() => handleSort("des", "id")}
+                  ></i>
+                  <i
+                    className="fa-solid fa-arrow-up-long"
+                    style={{ cursor: "pointer" }}
+                    onClick={() => handleSort("asc", "id")}
+                  ></i>
+                </span>
+              </div>
+            </th>
+            <th>
+              <span>Email</span>
+            </th>
+            <th>
+              <div style={{ display: "flex", justifyContent: "space-between" }}>
+                <span>First Name</span>
+                <span>
+                  <i
+                    className="fa-solid fa-arrow-down-long"
+                    style={{ cursor: "pointer" }}
+                    onClick={() => handleSort("des", "first_name")}
+                  ></i>
+                  <i
+                    className="fa-solid fa-arrow-up-long"
+                    style={{ cursor: "pointer" }}
+                    onClick={() => handleSort("asc", "first_name")}
+                  ></i>
+                </span>
+              </div>
+            </th>
+            <th>
+              <span>Last Name</span>
+            </th>
           </tr>
         </thead>
         <tbody>
