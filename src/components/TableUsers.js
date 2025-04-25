@@ -3,6 +3,7 @@ import Table from "react-bootstrap/Table";
 import { fetchAllUsers } from "../services/UserService";
 import ReactPaginate from "react-paginate";
 import ModalAddNew from "./ModalAddNew";
+import ModalEditUser from "./ModalEditUser";
 
 const TableUsers = () => {
   const [listUsers, setListUsers] = useState([]);
@@ -10,6 +11,8 @@ const TableUsers = () => {
   const [totalPages, setTotalPages] = useState(0);
 
   const [isShowModalAddNew, setIsShowModalAddNew] = useState(false);
+  const [isShowModalEdit, setIsShowModalEdit] = useState(false);
+  const [dataUserEdit, setDataUserEdit] = useState({});
 
   const getUsers = async (page) => {
     const res = await fetchAllUsers(page);
@@ -27,10 +30,16 @@ const TableUsers = () => {
 
   const handleClose = () => {
     setIsShowModalAddNew(false);
+    setIsShowModalEdit(false);
   };
 
   const handleUpdate = (user) => {
     setListUsers([...listUsers, user]);
+  };
+
+  const handleEditUser = (user) => {
+    setIsShowModalEdit(true);
+    setDataUserEdit(user);
   };
 
   // Hook useEffect
@@ -57,11 +66,7 @@ const TableUsers = () => {
           Add new user
         </button>
       </div>
-      <ModalAddNew
-        show={isShowModalAddNew}
-        handleClose={handleClose}
-        handleUpdate={handleUpdate}
-      />
+
       <Table striped bordered hover>
         <thead>
           <tr>
@@ -81,11 +86,32 @@ const TableUsers = () => {
                   <td>{item.email}</td>
                   <td>{item.first_name}</td>
                   <td>{item.last_name}</td>
+                  <td
+                    style={{ display: "flex", justifyContent: "space-evenly" }}
+                  >
+                    <button
+                      className="btn btn-warning"
+                      onClick={() => handleEditUser(item)}
+                    >
+                      Edit
+                    </button>
+                    <button className="btn btn-danger">Delete</button>
+                  </td>
                 </tr>
               );
             })}
         </tbody>
       </Table>
+      <ModalAddNew
+        show={isShowModalAddNew}
+        handleClose={handleClose}
+        handleUpdate={handleUpdate}
+      />
+      <ModalEditUser
+        show={isShowModalEdit}
+        dataUserEdit={dataUserEdit}
+        handleClose={handleClose}
+      />
       <ReactPaginate
         breakLabel="..."
         nextLabel="next >"
