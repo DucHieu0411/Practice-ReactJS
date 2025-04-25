@@ -5,6 +5,7 @@ import ReactPaginate from "react-paginate";
 import ModalAddNew from "./ModalAddNew";
 import ModalEditUser from "./ModalEditUser";
 import _ from "lodash";
+import ModalConfirm from "./ModalConfirm";
 
 const TableUsers = () => {
   const [listUsers, setListUsers] = useState([]);
@@ -14,6 +15,9 @@ const TableUsers = () => {
   const [isShowModalAddNew, setIsShowModalAddNew] = useState(false);
   const [isShowModalEdit, setIsShowModalEdit] = useState(false);
   const [dataUserEdit, setDataUserEdit] = useState({});
+
+  const [isShowModalDelete, setIsShowModalDelete] = useState(false);
+  const [dataUserDelete, setDataUserDelete] = useState({});
 
   const getUsers = async (page) => {
     const res = await fetchAllUsers(page);
@@ -32,6 +36,7 @@ const TableUsers = () => {
   const handleClose = () => {
     setIsShowModalAddNew(false);
     setIsShowModalEdit(false);
+    setIsShowModalDelete(false);
   };
 
   const handleUpdate = (user) => {
@@ -48,6 +53,11 @@ const TableUsers = () => {
     let index = listUsers.findIndex((item) => item.id === user.id);
     cloneListUsers[index].first_name = user.first_name;
     setListUsers(cloneListUsers);
+  };
+
+  const handleDeleteUser = (user) => {
+    setIsShowModalDelete(true);
+    setDataUserDelete(user);
   };
 
   // Hook useEffect
@@ -103,7 +113,12 @@ const TableUsers = () => {
                     >
                       Edit
                     </button>
-                    <button className="btn btn-danger">Delete</button>
+                    <button
+                      className="btn btn-danger"
+                      onClick={() => handleDeleteUser(item)}
+                    >
+                      Delete
+                    </button>
                   </td>
                 </tr>
               );
@@ -120,6 +135,11 @@ const TableUsers = () => {
         dataUserEdit={dataUserEdit}
         handleClose={handleClose}
         handleEditUserFromModal={handleEditUserFromModal}
+      />
+      <ModalConfirm
+        show={isShowModalDelete}
+        handleClose={handleClose}
+        dataUserDelete={dataUserDelete}
       />
       <ReactPaginate
         breakLabel="..."
