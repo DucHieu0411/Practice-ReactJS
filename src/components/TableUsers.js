@@ -4,6 +4,7 @@ import { fetchAllUsers } from "../services/UserService";
 import ReactPaginate from "react-paginate";
 import ModalAddNew from "./ModalAddNew";
 import ModalEditUser from "./ModalEditUser";
+import _ from "lodash";
 
 const TableUsers = () => {
   const [listUsers, setListUsers] = useState([]);
@@ -40,6 +41,13 @@ const TableUsers = () => {
   const handleEditUser = (user) => {
     setIsShowModalEdit(true);
     setDataUserEdit(user);
+  };
+
+  const handleEditUserFromModal = (user) => {
+    let cloneListUsers = _.cloneDeep(listUsers);
+    let index = listUsers.findIndex((item) => item.id === user.id);
+    cloneListUsers[index].first_name = user.first_name;
+    setListUsers(cloneListUsers);
   };
 
   // Hook useEffect
@@ -111,6 +119,7 @@ const TableUsers = () => {
         show={isShowModalEdit}
         dataUserEdit={dataUserEdit}
         handleClose={handleClose}
+        handleEditUserFromModal={handleEditUserFromModal}
       />
       <ReactPaginate
         breakLabel="..."
