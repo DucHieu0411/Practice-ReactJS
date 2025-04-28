@@ -1,10 +1,19 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { loginApi } from "../services/UserService";
+import { useNavigate } from "react-router-dom";
 const Login = () => {
+  const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isShowPassword, setIsShowPassword] = useState(false);
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      navigate("/");
+    }
+  }, []);
 
   const handleLogin = async () => {
     if (!email || !password) {
@@ -14,12 +23,15 @@ const Login = () => {
     let res = await loginApi(email, password);
     if (res && res.token) {
       localStorage.setItem("token", res.token);
+      navigate("/");
     }
   };
   return (
     <div className="login-container col-12 col-sm-4">
       <div className="title">Login</div>
-      <div className="text">Email or Username</div>
+      <div className="text">
+        Email or Username (eve.holt@reqres.in & cityslicka)
+      </div>
       <input
         type="text"
         placeholder="Email or username..."
