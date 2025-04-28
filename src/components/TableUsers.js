@@ -96,7 +96,7 @@ const TableUsers = () => {
   // Hook useEffect
   useEffect(() => {
     // CALL APIS
-    getUsers();
+    getUsers(1);
   }, []);
 
   return (
