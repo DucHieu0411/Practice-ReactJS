@@ -1,5 +1,4 @@
 import React, { createContext, useState } from "react";
-import { useNavigate } from "react-router-dom";
 
 // Create Context
 const UserContext = createContext({ email: "", auth: false });
