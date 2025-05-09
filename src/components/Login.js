@@ -1,9 +1,12 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { loginApi } from "../services/UserService";
 import { useNavigate } from "react-router-dom";
+import { UserContext } from "../context/UserContext";
 const Login = () => {
   const navigate = useNavigate();
+  const { loginContext } = useContext(UserContext);
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
@@ -15,7 +18,7 @@ const Login = () => {
 
     let res = await loginApi(email, password);
     if (res && res.token) {
-      localStorage.setItem("token", res.token);
+      loginContext(email, res.token);
       navigate("/users");
     } else {
       // Error

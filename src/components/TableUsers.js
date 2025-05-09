@@ -6,8 +6,10 @@ import ModalAddNew from "./ModalAddNew";
 import ModalEditUser from "./ModalEditUser";
 import _, { debounce } from "lodash";
 import ModalConfirm from "./ModalConfirm";
+import { useNavigate } from "react-router-dom";
 
 const TableUsers = () => {
+  const navigate = useNavigate();
   const [listUsers, setListUsers] = useState([]);
   const [totalUsers, setTotalUsers] = useState(0);
   const [totalPages, setTotalPages] = useState(0);
@@ -91,6 +93,8 @@ const TableUsers = () => {
     }
   }, 200);
 
+  const checkLogin = localStorage.getItem("token");
+
   // Hook useEffect
   useEffect(() => {
     // CALL APIS
@@ -99,108 +103,123 @@ const TableUsers = () => {
 
   return (
     <>
-      <div
-        className="my-3 add-new"
-        style={{
-          display: "flex",
-          justifyContent: "space-between",
-          alignContent: "center",
-        }}
-      >
-        <span>List Users: </span>
-        <button
-          className="btn btn-success"
-          onClick={() => setIsShowModalAddNew(true)}
-        >
-          Add new user
-        </button>
-      </div>
-
-      <div className="col-4 my-3">
-        <input
-          className="form-control"
-          placeholder="Search user by email..."
-          style={{ outline: "double" }}
-          onChange={(e) => handleSearch(e)}
-        />
-      </div>
-
-      <Table striped bordered hover>
-        <thead>
-          <tr>
-            <th>
-              <div style={{ display: "flex", justifyContent: "space-between" }}>
-                <span>ID</span>
-                <span>
-                  <div style={{ display: "flex", marginTop: "5px" }}>
-                    <i
-                      className="fa-solid fa-arrow-down-long"
-                      style={{ cursor: "pointer" }}
-                      onClick={() => handleSort("desc", "id")}
-                    ></i>
-                    <i
-                      className="fa-solid fa-arrow-up-long"
-                      style={{ cursor: "pointer" }}
-                      onClick={() => handleSort("asc", "id")}
-                    ></i>
-                  </div>
-                </span>
+      {checkLogin
+        ? [
+            <>
+              <div
+                className="my-3 add-new"
+                style={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  alignContent: "center",
+                }}
+              >
+                <span>List Users: </span>
+                <button
+                  className="btn btn-success"
+                  onClick={() => setIsShowModalAddNew(true)}
+                >
+                  Add new user
+                </button>
               </div>
-            </th>
-            <th>
-              <span>Email</span>
-            </th>
-            <th>
-              <span>First Name</span>
-              <span>
-                <i
-                  className="fa-solid fa-arrow-down-long"
-                  style={{ cursor: "pointer" }}
-                  onClick={() => handleSort("desc", "first_name")}
-                ></i>
-                <i
-                  className="fa-solid fa-arrow-up-long"
-                  style={{ cursor: "pointer" }}
-                  onClick={() => handleSort("asc", "first_name")}
-                ></i>
-              </span>
-            </th>
-            <th>
-              <span>Last Name</span>
-            </th>
-          </tr>
-        </thead>
-        <tbody>
-          {listUsers &&
-            listUsers.length > 0 &&
-            listUsers.map((item) => {
-              return (
-                <tr key={item.id}>
-                  <td>{item.id}</td>
-                  <td>{item.email}</td>
-                  <td>{item.first_name}</td>
-                  <td>{item.last_name}</td>
-                  <td
-                    style={{ display: "flex", justifyContent: "space-evenly" }}
-                  >
-                    <button
-                      className="btn btn-warning"
-                      onClick={() => handleEditUser(item)}
-                    >
-                      Edit
-                    </button>
-                    <button
-                      className="btn btn-danger"
-                      onClick={() => handleDeleteUser(item)}
-                    >
-                      Delete
-                    </button>
-                  </td>
-                </tr>
-              );
-            })}
-        </tbody>
-      </Table>
+
+              <div className="col-4 my-3">
+                <input
+                  className="form-control"
+                  placeholder="Search user by email..."
+                  style={{ outline: "double" }}
+                  onChange={(e) => handleSearch(e)}
+                />
+              </div>
+
+              <Table striped bordered hover>
+                <thead>
+                  <tr>
+                    <th>
+                      <div
+                        style={{
+                          display: "flex",
+                          justifyContent: "space-between",
+                        }}
+                      >
+                        <span>ID</span>
+                        <span>
+                          <div style={{ display: "flex", marginTop: "5px" }}>
+                            <i
+                              className="fa-solid fa-arrow-down-long"
+                              style={{ cursor: "pointer" }}
+                              onClick={() => handleSort("desc", "id")}
+                            ></i>
+                            <i
+                              className="fa-solid fa-arrow-up-long"
+                              style={{ cursor: "pointer" }}
+                              onClick={() => handleSort("asc", "id")}
+                            ></i>
+                          </div>
+                        </span>
+                      </div>
+                    </th>
+                    <th>
+                      <span>Email</span>
+                    </th>
+                    <th>
+                      <span>First Name</span>
+                      <span>
+                        <i
+                          className="fa-solid fa-arrow-down-long"
+                          style={{ cursor: "pointer" }}
+                          onClick={() => handleSort("desc", "first_name")}
+                        ></i>
+                        <i
+                          className="fa-solid fa-arrow-up-long"
+                          style={{ cursor: "pointer" }}
+                          onClick={() => handleSort("asc", "first_name")}
+                        ></i>
+                      </span>
+                    </th>
+                    <th>
+                      <span>Last Name</span>
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {listUsers &&
+                    listUsers.length > 0 &&
+                    listUsers.map((item) => {
+                      return (
+                        <tr key={item.id}>
+                          <td>{item.id}</td>
+                          <td>{item.email}</td>
+                          <td>{item.first_name}</td>
+                          <td>{item.last_name}</td>
+                          <td
+                            style={{
+                              display: "flex",
+                              justifyContent: "space-evenly",
+                            }}
+                          >
+                            <button
+                              className="btn btn-warning"
+                              onClick={() => handleEditUser(item)}
+                            >
+                              Edit
+                            </button>
+                            <button
+                              className="btn btn-danger"
+                              onClick={() => handleDeleteUser(item)}
+                            >
+                              Delete
+                            </button>
+                          </td>
+                        </tr>
+                      );
+                    })}
+                </tbody>
+              </Table>
+            </>,
+          ]
+        : [navigate("/login")]}
+
       <ModalAddNew
         show={isShowModalAddNew}
         handleClose={handleClose}

@@ -1,15 +1,17 @@
-import React from "react";
+import React, { useContext } from "react";
 import Container from "react-bootstrap/Container";
 import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
 import NavDropdown from "react-bootstrap/NavDropdown";
 import { NavLink, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import { UserContext } from "../context/UserContext";
 
 const Header = (props) => {
+  const { logoutContext } = useContext(UserContext);
   const navigate = useNavigate();
   const handleLogout = () => {
-    localStorage.removeItem("token");
+    logoutContext();
     navigate("/");
     toast.success("Log out success!");
   };
