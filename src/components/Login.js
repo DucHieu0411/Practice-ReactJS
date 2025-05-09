@@ -6,24 +6,22 @@ const Login = () => {
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [isShowPassword, setIsShowPassword] = useState(false);
-
-  useEffect(() => {
-    const token = localStorage.getItem("token");
-    if (token) {
-      navigate("/");
-    }
-  }, []);
 
   const handleLogin = async () => {
-    if (!email || !password) {
+    if (!email.trim() || !password.trim()) {
       toast.error("Email || Password is required!");
       return;
     }
+
     let res = await loginApi(email, password);
     if (res && res.token) {
       localStorage.setItem("token", res.token);
-      navigate("/");
+      navigate("/users");
+    } else {
+      // Error
+      if (res && res.status === 400) {
+        toast.error(res.data.error);
+      }
     }
   };
   return (
@@ -33,15 +31,19 @@ const Login = () => {
         Email or Username (eve.holt@reqres.in & cityslicka)
       </div>
       <input
+        className="input-data"
         type="text"
         placeholder="Email or username..."
+        required
         value={email}
         onChange={(e) => setEmail(e.target.value)}
       />
 
       <input
+        className="input-data"
         type="password"
         placeholder="Password..."
+        required
         value={password}
         onChange={(e) => setPassword(e.target.value)}
       />

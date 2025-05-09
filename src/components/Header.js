@@ -13,12 +13,39 @@ const Header = (props) => {
     navigate("/");
     toast.success("Log out success!");
   };
-  return (
-    <Navbar expand="lg" className="bg-body-tertiary">
-      <Container>
-        <Navbar.Brand href="/">React-Bootstrap</Navbar.Brand>
-        <Navbar.Toggle aria-controls="basic-navbar-nav" />
-        <Navbar.Collapse id="basic-navbar-nav">
+  const checkUser = localStorage.getItem("token")
+    ? [
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "row",
+          }}
+        >
+          <Nav className="me-auto">
+            <NavLink to="/" className="nav-link">
+              Home
+            </NavLink>
+
+            <NavLink to="/users" className="nav-link">
+              Manage Users
+            </NavLink>
+          </Nav>
+          <Nav>
+            <NavDropdown title="Setting">
+              <NavDropdown.Item onClick={() => handleLogout()}>
+                Logout
+              </NavDropdown.Item>
+            </NavDropdown>
+          </Nav>
+        </div>,
+      ]
+    : [
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "row",
+          }}
+        >
           <Nav className="me-auto">
             <NavLink to="/" className="nav-link">
               Home
@@ -31,12 +58,22 @@ const Header = (props) => {
           <Nav>
             <NavDropdown title="Setting">
               <NavLink to="/login" className="nav-link">
-                Home
+                Login
               </NavLink>
-              <NavDropdown.Item onClick={() => handleLogout()}>
-                Logout
-              </NavDropdown.Item>
             </NavDropdown>
+          </Nav>
+        </div>,
+      ];
+  return (
+    <Navbar expand="lg" className="bg-body-tertiary">
+      <Container>
+        <Navbar.Brand href="/">React-Bootstrap</Navbar.Brand>
+        <Navbar.Toggle aria-controls="basic-navbar-nav" />
+        <Navbar.Collapse id="basic-navbar-nav">
+          <Nav className="me-auto">
+            {checkUser.map((user, index) => {
+              return <div key={index}>{user}</div>;
+            })}
           </Nav>
         </Navbar.Collapse>
       </Container>

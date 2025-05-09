@@ -19,10 +19,8 @@ const TableUsers = () => {
   const [isShowModalDelete, setIsShowModalDelete] = useState(false);
   const [dataUserDelete, setDataUserDelete] = useState({});
 
-  const [sortBy, setSortBy] = useState("asc");
+  const [sortBy, setSortBy] = useState("asc" || "desc");
   const [sortField, setSortField] = useState("id");
-
-  const [keyword, setKeyword] = useState("");
 
   const getUsers = async (page) => {
     const res = await fetchAllUsers(page);
@@ -89,9 +87,9 @@ const TableUsers = () => {
       );
       setListUsers(cloneListUsers);
     } else {
-      getUsers();
+      getUsers(1);
     }
-  }, 500);
+  }, 200);
 
   // Hook useEffect
   useEffect(() => {
@@ -122,6 +120,7 @@ const TableUsers = () => {
         <input
           className="form-control"
           placeholder="Search user by email..."
+          style={{ outline: "double" }}
           onChange={(e) => handleSearch(e)}
         />
       </div>
@@ -133,16 +132,18 @@ const TableUsers = () => {
               <div style={{ display: "flex", justifyContent: "space-between" }}>
                 <span>ID</span>
                 <span>
-                  <i
-                    className="fa-solid fa-arrow-down-long"
-                    style={{ cursor: "pointer" }}
-                    onClick={() => handleSort("des", "id")}
-                  ></i>
-                  <i
-                    className="fa-solid fa-arrow-up-long"
-                    style={{ cursor: "pointer" }}
-                    onClick={() => handleSort("asc", "id")}
-                  ></i>
+                  <div style={{ display: "flex", marginTop: "5px" }}>
+                    <i
+                      className="fa-solid fa-arrow-down-long"
+                      style={{ cursor: "pointer" }}
+                      onClick={() => handleSort("desc", "id")}
+                    ></i>
+                    <i
+                      className="fa-solid fa-arrow-up-long"
+                      style={{ cursor: "pointer" }}
+                      onClick={() => handleSort("asc", "id")}
+                    ></i>
+                  </div>
                 </span>
               </div>
             </th>
@@ -150,21 +151,19 @@ const TableUsers = () => {
               <span>Email</span>
             </th>
             <th>
-              <div style={{ display: "flex", justifyContent: "space-between" }}>
-                <span>First Name</span>
-                <span>
-                  <i
-                    className="fa-solid fa-arrow-down-long"
-                    style={{ cursor: "pointer" }}
-                    onClick={() => handleSort("des", "first_name")}
-                  ></i>
-                  <i
-                    className="fa-solid fa-arrow-up-long"
-                    style={{ cursor: "pointer" }}
-                    onClick={() => handleSort("asc", "first_name")}
-                  ></i>
-                </span>
-              </div>
+              <span>First Name</span>
+              <span>
+                <i
+                  className="fa-solid fa-arrow-down-long"
+                  style={{ cursor: "pointer" }}
+                  onClick={() => handleSort("desc", "first_name")}
+                ></i>
+                <i
+                  className="fa-solid fa-arrow-up-long"
+                  style={{ cursor: "pointer" }}
+                  onClick={() => handleSort("asc", "first_name")}
+                ></i>
+              </span>
             </th>
             <th>
               <span>Last Name</span>
